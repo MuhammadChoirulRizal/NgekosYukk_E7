@@ -1,0 +1,74 @@
+<%- include('partials/header', { title: 'Edit Data Kamar' }) %>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">
+                    <i class="bi bi-pencil-square"></i> Edit Data Kamar #<%= kamar.id_kamar %>
+                </h5>
+            </div>
+            <div class="card-body">
+                <form action="/kamar/edit/<%= kamar.id_kamar %>" method="POST">
+                    <div class="mb-3">
+                        <label for="jenis_kamar" class="form-label">Jenis Kamar *</label>
+                        <input type="text" class="form-control <%= errors && errors.find(e => e.param === 'jenis_kamar') ? 'is-invalid' : '' %>" 
+                               id="jenis_kamar" name="jenis_kamar" 
+                               value="<%= kamar.jenis_kamar %>" required>
+                        <% if (errors && errors.find(e => e.param === 'jenis_kamar')) { %>
+                            <div class="invalid-feedback">
+                                <%= errors.find(e => e.param === 'jenis_kamar').msg %>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi Kamar</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"><%= kamar.deskripsi %></textarea>
+                        <small class="text-muted">Deskripsikan fasilitas dan kondisi kamar</small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="harga" class="form-label">Harga Sewa per Bulan (Rp) *</label>
+                            <input type="number" class="form-control <%= errors && errors.find(e => e.param === 'harga') ? 'is-invalid' : '' %>" 
+                                   id="harga" name="harga" 
+                                   value="<%= kamar.harga %>" min="0" step="100000" required>
+                            <% if (errors && errors.find(e => e.param === 'harga')) { %>
+                                <div class="invalid-feedback">
+                                    <%= errors.find(e => e.param === 'harga').msg %>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="status_kamar" class="form-label">Status Kamar *</label>
+                            <select class="form-select <%= errors && errors.find(e => e.param === 'status_kamar') ? 'is-invalid' : '' %>" 
+                                    id="status_kamar" name="status_kamar" required>
+                                <option value="tersedia" <%= kamar.status_kamar === 'tersedia' ? 'selected' : '' %>>Tersedia</option>
+                                <option value="terisi" <%= kamar.status_kamar === 'terisi' ? 'selected' : '' %>>Terisi</option>
+                                <option value="maintenance" <%= kamar.status_kamar === 'maintenance' ? 'selected' : '' %>>Dalam Perbaikan</option>
+                            </select>
+                            <% if (errors && errors.find(e => e.param === 'status_kamar')) { %>
+                                <div class="invalid-feedback">
+                                    <%= errors.find(e => e.param === 'status_kamar').msg %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-arrow-left"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-check-circle"></i> Update Data
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

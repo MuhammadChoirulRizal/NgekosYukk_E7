@@ -1,0 +1,121 @@
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-success">
+            <h4 class="alert-heading"><i class="bi bi-check-circle"></i> Aplikasi Berjalan!</h4>
+            <p class="mb-0">Selamat datang di sistem manajemen kos <strong>Ngekos.Yuk</strong>. Aplikasi berhasil dijalankan dengan Docker Compose.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card text-center bg-info text-white">
+            <div class="card-body">
+                <h1 class="display-4"><%= stats.total_kamar %></h1>
+                <i class="bi bi-door-closed fs-1"></i>
+                <h5>Total Kamar</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card text-center bg-success text-white">
+            <div class="card-body">
+                <h1 class="display-4"><%= stats.kamar_tersedia %></h1>
+                <i class="bi bi-check-circle fs-1"></i>
+                <h5>Kamar Tersedia</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card text-center bg-danger text-white">
+            <div class="card-body">
+                <h1 class="display-4"><%= stats.kamar_terisi %></h1>
+                <i class="bi bi-person-check fs-1"></i>
+                <h5>Kamar Terisi</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card text-center bg-warning text-white">
+            <div class="card-body">
+                <h1 class="display-4"><%= stats.kamar_maintenance %></h1>
+                <i class="bi bi-tools fs-1"></i>
+                <h5>Dalam Perbaikan</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Kamar -->
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-clock-history"></i> Kamar Terbaru
+        </h5>
+    </div>
+    <div class="card-body">
+        <% if (kamar.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Jenis Kamar</th>
+                            <th>Harga</th>
+                            <th>Status</th>
+                            <th>Penyewa</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% kamar.forEach(k => { %>
+                            <tr>
+                                <td><%= k.id_kamar %></td>
+                                <td><strong><%= k.jenis_kamar %></strong></td>
+                                <td>Rp <%= k.harga.toLocaleString('id-ID') %></td>
+                                <td>
+                                    <span class="badge rounded-pill p-2 
+                                        <%= k.status_kamar === 'tersedia' ? 'status-tersedia' : '' %>
+                                        <%= k.status_kamar === 'terisi' ? 'status-terisi' : '' %>
+                                        <%= k.status_kamar === 'maintenance' ? 'status-maintenance' : '' %>">
+                                        <%= k.status_kamar %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <%= k.nama_penyewa ? k.nama_penyewa : 'Belum ada penyewa' %>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <%= new Date(k.created_at).toLocaleDateString('id-ID') %>
+                                    </small>
+                                </td>
+                                <td>
+                                    <a href="/kamar/edit/<%= k.id_kamar %>" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <form action="/kamar/hapus/<%= k.id_kamar %>" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                            onclick="return confirm('Yakin hapus data ini?')">
+                                            <i class="bi bi-trash"></i> Hapus
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i> Belum ada data kamar.
+                <a href="/kamar/tambah" class="alert-link">Tambahkan kamar pertama</a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
